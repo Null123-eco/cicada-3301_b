@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cicada 3301-B</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #000000;
+      color: #e5e9f0;
+      font-family: 'Courier New', Courier, monospace;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    video {
+      width: 100%;
+      max-width: 720px;
+      background: #000000;
+      border: 1px solid #14171c;
+    }
+    #apagon-morse {
+      display: none;
+      width: 100%;
+      max-width: 720px;
+      min-height: 360px;
+      background: #000000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      text-align: center;
+      padding: 24px;
+    }
+    #pulso-luz {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #ffffff;
+      opacity: 0;
+      box-shadow: 0 0 18px rgba(255, 255, 255, 0.75);
+      transition: opacity 0.04s linear;
+    }
+    #pulso-luz.encendido {
+      opacity: 1;
+    }
+    #simbolo-actual {
+      font-size: 1.5rem;
+      letter-spacing: 0.35em;
+      min-height: 2rem;
+      color: #d8dee9;
+    }
+    #btn-audio {
+      background: transparent;
+      color: #6c7585;
+      border: 1px solid #222730;
+      padding: 8px 14px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    #btn-audio:hover {
+      color: #d8dee9;
+      border-color: #4c566a;
+    }
+  </style>
+</head>
+<body>
+
+  <video id="video-homero" src="homero.mp4" controls playsinline></video>
+
+  <div id="apagon-morse">
+    <div id="pulso-luz"></div>
+    <p id="simbolo-actual"></p>
+    <button id="btn-audio" type="button">Activar pitido Morse</button>
+  </div>
+
+  <script>
+    const SEGUNDO_CORTE = 16;
+    const COORDENADAS = "10.5006223956924, -66.90166251609041";
+    const UNIDAD_MS = 180;
+
+    const MORSE_MAP = {
+      'A': '.-',    'B': '-...',  'C': '-.-.',  'D': '-..',   'E': '.',
+      'F': '..-.',  'G': '--.',   'H': '....',  'I': '..',    'J': '.---',
+      'K': '-.-',   'L': '.-..',  'M': '--',    'N': '-.',    'O': '---',
+      'P': '.--.',  'Q': '--.-',  'R': '.-.',   'S': '...',   'T': '-',
+      'U': '..-',   'V': '...-',  'W': '.--',   'X': '-..-',  'Y': '-.--',
+      'Z': '--..',
+      '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-',
+      '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.',
+      '.': '.-.-.-', ',': '--..--', '-': '-....-', '/': '-..-.',
+      ':': '---...', ';': '-.-.-.', '=': '-...-', '+': '.-.-.',
+      '(': '-.--.', ')': '-.--.-', '°': '---..'
+    };
+
+    const video = document.getElementById('video-homero');
+    const pantallaMorse = document.getElementById('apagon-morse');
+    const pulsoLuz = document.getElementById('pulso-luz');
+    const simboloActual = document.getElementById('simbolo-actual');
+    const btnAudio = document.getElementById('btn-audio');
+
+    let audioActivo = false;
+    let audioCtx = null;
+    let yaDisparo = false;
+
+    btnAudio.addEventListener('click', () => {
+      audioActivo = !audioActivo;
+      if (audioActivo && !audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      btnAudio.textContent = audioActivo ? 'Silenciar pitido Morse' : 'Activar pitido Morse';
+    });
+
+    function emitirTono(duracionMs) {
+      if (!audioActivo || !audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = 680;
+      gain.gain.value = 0.08;
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      const ahora = audioCtx.currentTime;
+      osc.start(ahora);
+      osc.stop(ahora + duracionMs / 1000);
+    }
+
+    function textoAMorse(texto) {
+      return texto
+        .toUpperCase()
+        .split('')
+        .map(ch => {
+          if (ch === ' ') return '/';
+          return MORSE_MAP[ch] || '';
+        })
+        .filter(Boolean)
+        .join(' ');
+    }
+
+    function esperar(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function ejecutarSecuencia(morse) {
+      while (true) {
+        const tokens = morse.split(' ');
+        for (let i = 0; i < tokens.length; i++) {
+          const token = tokens[i];
+          if (token === '/') {
+            simboloActual.textContent = '';
+            await esperar(UNIDAD_MS * 4);
+            continue;
+          }
+
+          for (let j = 0; j < token.length; j++) {
+            const marca = token[j];
+            const duracion = marca === '-' ? UNIDAD_MS * 3 : UNIDAD_MS;
+
+            pulsoLuz.classList.add('encendido');
+            simboloActual.textContent = marca;
+            emitirTono(duracion);
+
+            await esperar(duracion);
+
+            pulsoLuz.classList.remove('encendido');
+            simboloActual.textContent = '';
+            await esperar(UNIDAD_MS);
+          }
+
+          await esperar(UNIDAD_MS * 2);
+        }
+        await esperar(UNIDAD_MS * 8);
+      }
+    }
+
+    video.addEventListener('timeupdate', () => {
+      if (!yaDisparo && video.currentTime >= SEGUNDO_CORTE) {
+        yaDisparo = true;
+        video.pause();
+        video.style.display = 'none';
+        pantallaMorse.style.display = 'flex';
+        const morseGenerado = textoAMorse(COORDENADAS);
+        ejecutarSecuencia(morseGenerado);
+      }
+    });
+  </script>
+
+</body>
+</html>
