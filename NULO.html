@@ -1,112 +1,130 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NULO // Cicada 3301-B</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NULO · Acceso Concedido</title>
   <style>
+    :root {
+      --bg: #07090d;
+      --panel: #0e131b;
+      --borde: #1e2736;
+      --texto: #e5e9f0;
+      --sutil: #94a3b8;
+      --acento: #cbd5e1;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
+
     body {
-      background-color: #050608;
-      color: #e5e9f0;
-      font-family: 'Courier New', Courier, monospace;
       min-height: 100vh;
+      background-color: var(--bg);
+      color: var(--texto);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
-      position: relative;
-      overflow-x: hidden;
+      padding: 24px 16px;
+      line-height: 1.5;
     }
+
+    .contenedor {
+      width: 100%;
+      max-width: 540px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
     .panel {
       width: 100%;
-      max-width: 680px;
-      background: #0b0d11;
-      border: 1px solid #1d222b;
-      padding: 32px 28px;
-      text-align: center;
+      background-color: var(--panel);
+      border: 1px solid var(--borde);
+      border-radius: 10px;
+      padding: 28px 22px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
     }
+
     .etiqueta {
-      font-size: 0.75rem;
-      letter-spacing: 0.25em;
-      color: #7c8798;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      margin-bottom: 18px;
+      color: var(--sutil);
+      margin-bottom: 12px;
     }
+
     .cita {
       font-size: 1.35rem;
-      line-height: 1.5;
-      letter-spacing: 0.08em;
-      color: #f0f4f8;
-      margin-bottom: 24px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 18px;
+      color: var(--texto);
     }
+
     .divisor {
-      width: 64px;
       height: 1px;
-      background: #232934;
-      margin: 0 auto 22px;
+      background-color: var(--borde);
+      margin: 18px 0;
     }
-    .certificado {
-      text-align: left;
-      background: #07080b;
-      border: 1px solid #171b22;
-      padding: 20px;
-      margin-bottom: 22px;
-      font-size: 0.92rem;
-      line-height: 1.7;
-      color: #c8d0dc;
-    }
-    .certificado p {
+
+    .certificado-titulo {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--sutil);
       margin-bottom: 8px;
     }
-    .certificado p:last-child {
-      margin-bottom: 0;
+
+    .certificado-texto {
+      font-size: 0.98rem;
+      color: var(--texto);
+      margin-bottom: 14px;
     }
-    .destacado {
-      color: #ffffff;
-      font-weight: bold;
+
+    .sello {
+      display: inline-block;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.8rem;
+      color: var(--acento);
+      border: 1px solid var(--borde);
+      padding: 6px 10px;
+      border-radius: 6px;
+      background-color: rgba(255, 255, 255, 0.02);
     }
-    .nota-cierre {
-      font-size: 0.85rem;
-      color: #8b95a5;
-      line-height: 1.6;
-    }
-    .binario-eco {
-      position: fixed;
-      left: 12px;
-      bottom: 10px;
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
-      color: #16191f;
-      user-select: all;
-      pointer-events: none;
+
+    .morse-final {
+      margin-top: 20px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.95rem;
+      letter-spacing: 0.14em;
+      color: var(--acento);
+      text-align: center;
+      word-break: break-word;
+      padding: 0 8px;
     }
   </style>
 </head>
 <body>
-
-  <main class="panel">
-    <p class="etiqueta">Acceso concedido · Nodo NULO</p>
-    <h1 class="cita">LO ÚNICO QUE SÉ ES QUE NO SÉ NADA</h1>
-    <div class="divisor"></div>
-
-    <section class="certificado" aria-label="Certificado de descifrado">
-      <p><span class="destacado">OPERACIÓN:</span> Cicada 3301-B</p>
-      <p><span class="destacado">ESTADO:</span> Secuencia completada</p>
-      <p><span class="destacado">RANGO OTORGADO:</span> Descifrador de NULO</p>
-      <p><span class="destacado">FIRMA:</span> Null</p>
+  <main class="contenedor">
+    <section class="panel" aria-label="Certificado Nodo NULO">
+      <p class="etiqueta">Acceso concedido · Nodo NULO</p>
+      <h1 class="cita">LO ÚNICO QUE SÉ ES QUE NO SÉ NADA</h1>
+      <div class="divisor"></div>
+      <p class="certificado-titulo">Certificado de resolución</p>
+      <p class="certificado-texto">
+        Has completado el recorrido de <strong>Cicada 3301-B</strong> y descifrado la ruta hasta el final.
+      </p>
+      <span class="sello">ESTADO: VERIFICADO · NODO NULO</span>
     </section>
 
-    <p class="nota-cierre">
-      Toma captura de esta pantalla como comprobante de que llegaste hasta el final.
+    <p class="morse-final" aria-label="Felicidades en código Morse">
+      ..-. / . / .-.. / .. / -.-. / .. / -.. / .- / -.. / . / ...
     </p>
   </main>
-
-  <span class="binario-eco">01100101 01100011 01101111</span>
-
 </body>
 </html>
