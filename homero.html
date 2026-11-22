@@ -154,35 +154,35 @@
     }
 
     async function ejecutarSecuencia(morse) {
-      while (true) {
-        const tokens = morse.split(' ');
-        for (let i = 0; i < tokens.length; i++) {
-          const token = tokens[i];
-          if (token === '/') {
-            simboloActual.textContent = '';
-            await esperar(UNIDAD_MS * 4);
-            continue;
-          }
-
-          for (let j = 0; j < token.length; j++) {
-            const marca = token[j];
-            const duracion = marca === '-' ? UNIDAD_MS * 3 : UNIDAD_MS;
-
-            pulsoLuz.classList.add('encendido');
-            simboloActual.textContent = marca;
-            emitirTono(duracion);
-
-            await esperar(duracion);
-
-            pulsoLuz.classList.remove('encendido');
-            simboloActual.textContent = '';
-            await esperar(UNIDAD_MS);
-          }
-
-          await esperar(UNIDAD_MS * 2);
+      const tokens = morse.split(' ');
+      for (let i = 0; i < tokens.length; i++) {
+        const token = tokens[i];
+        if (token === '/') {
+          simboloActual.textContent = '';
+          await esperar(UNIDAD_MS * 4);
+          continue;
         }
-        await esperar(UNIDAD_MS * 8);
+
+        for (let j = 0; j < token.length; j++) {
+          const marca = token[j];
+          const duracion = marca === '-' ? UNIDAD_MS * 3 : UNIDAD_MS;
+
+          pulsoLuz.classList.add('encendido');
+          simboloActual.textContent = marca;
+          emitirTono(duracion);
+
+          await esperar(duracion);
+
+          pulsoLuz.classList.remove('encendido');
+          simboloActual.textContent = '';
+          await esperar(UNIDAD_MS);
+        }
+
+        await esperar(UNIDAD_MS * 2);
       }
+
+      pulsoLuz.classList.remove('encendido');
+      simboloActual.textContent = '';
     }
 
     video.addEventListener('timeupdate', () => {
