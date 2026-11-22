@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eco — Cicada 3301-B</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      background-color: #09090b;
+      color: #d4d4d8;
+      font-family: "Courier New", Courier, monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      text-align: center;
+    }
+    .frase-link {
+      max-width: 700px;
+      font-size: clamp(1.05rem, 2.6vw, 1.4rem);
+      line-height: 1.75;
+      color: #e4e4e7;
+      text-decoration: none;
+      padding: 18px 22px;
+      border: 1px solid transparent;
+      transition: color 0.25s ease, border-color 0.25s ease, text-shadow 0.25s ease;
+      cursor: pointer;
+    }
+    .frase-link:hover,
+    .frase-link:focus-visible {
+      color: #ffffff;
+      border-color: #3f3f46;
+      text-shadow: 0 0 12px rgba(255, 255, 255, 0.22);
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <a class="frase-link" href="../homero.html">
+    Lo que resuena en el silencio no pertenece al ruido; solo quien escucha el eco descubre dónde empieza el verdadero sendero.
+  </a>
+</body>
+</html>
