@@ -84,7 +84,7 @@
 
   <script>
     const SEGUNDO_CORTE = 16;
-    const COORDENADAS = "10.5006223956924, -66.90166251609041";
+    const PALABRA_CLAVE = "NULO";
     const UNIDAD_MS = 180;
 
     const MORSE_MAP = {
@@ -191,11 +191,10 @@
         video.pause();
         video.style.display = 'none';
         pantallaMorse.style.display = 'flex';
-        const morseGenerado = textoAMorse(COORDENADAS);
+        const morseGenerado = textoAMorse(PALABRA_CLAVE);
         ejecutarSecuencia(morseGenerado);
       }
     });
   </script>
 
 </body>
-</html>
